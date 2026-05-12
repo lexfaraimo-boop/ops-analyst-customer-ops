@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations Analyst, Customer Operations | Zinc Work</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --zinc-teal: #00FFCE;
+            --zinc-dark: #000000;
+            --zinc-gray: #6C6C6C;
+            --zinc-peach: #F7E2DA;
+            --zinc-peach-light: #FFEBDE;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--zinc-peach);
+            color: var(--zinc-dark);
+            overflow: hidden;
+        }
+
+        .presentation { width: 100vw; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            padding: 56px 80px;
+            display: none;
+            flex-direction: column;
+            background: var(--zinc-peach);
+        }
+
+        .slide.active { display: flex; }
+        .slide.dark { background: #0a0a0a; }
+
+        .slide-number {
+            position: absolute;
+            bottom: 28px;
+            right: 40px;
+            font-size: 13px;
+            color: #bbb;
+        }
+
+        .slide:not(.dark) .slide-number { color: #bbb; }
+
+        .logo { position: absolute; top: 22px; left: 36px; }
+
+        /* ── Type ── */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+        h1 span { color: var(--zinc-teal); }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--zinc-dark);
+            line-height: 1.2;
+        }
+        h2 span { color: var(--zinc-teal); }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--zinc-teal);
+            margin-bottom: 10px;
+        }
+
+        p { font-size: 18px; line-height: 1.65; color: var(--zinc-gray); }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 18px;
+        }
+
+        /* ── Cover ── */
+        .cover-inner {
+            margin-top: auto;
+            margin-bottom: auto;
+            padding-top: 40px;
+        }
+        .cover-tag {
+            display: inline-block;
+            background: var(--zinc-teal);
+            color: #000;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 4px;
+            margin-bottom: 26px;
+        }
+        .cover-sub {
+            font-size: 22px;
+            color: #777;
+            margin-top: 14px;
+            font-weight: 400;
+        }
+        .cover-audience {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 0.04em;
+        }
+        .cover-audience span { color: #888; font-weight: 600; }
+
+        /* ── Problem ── */
+        .problem-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .problem-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 18px 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .prob-icon {
+            width: 32px; height: 32px;
+            background: #fef3ee;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .prob-text { font-size: 17px; color: var(--zinc-gray); line-height: 1.5; }
+        .prob-text strong { color: var(--zinc-dark); font-weight: 600; }
+
+        /* ── Solution ── */
+        .solution-statement {
+            font-size: 26px;
+            font-weight: 500;
+            line-height: 1.55;
+            color: var(--zinc-dark);
+            margin-bottom: 30px;
+            max-width: 780px;
+        }
+        .solution-statement span {
+            color: var(--zinc-teal);
+            font-weight: 700;
+        }
+        .solution-points {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .solution-point {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            font-size: 16px;
+            color: var(--zinc-gray);
+        }
+        .solution-point .dot {
+            width: 8px; height: 8px;
+            background: var(--zinc-teal);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── What they own ── */
+        .owns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .owns-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .owns-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .owns-icon {
+            width: 26px; height: 26px;
+            background: var(--zinc-teal);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .owns-card-header h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--zinc-dark);
+        }
+        .owns-card ul { list-style: none; padding: 0; }
+        .owns-card li {
+            font-size: 14px;
+            color: var(--zinc-gray);
+            padding: 5px 0;
+            border-bottom: 1px solid #f5f5f5;
+            line-height: 1.4;
+        }
+        .owns-card li:last-child { border-bottom: none; }
+
+        .not-box {
+            margin-top: 14px;
+            background: #f8f8f8;
+            border: 1.5px dashed #ddd;
+            border-radius: 10px;
+            padding: 13px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .not-box p { font-size: 14px; color: #999; }
+        .not-box p strong { color: #777; }
+
+        /* ── How it works — org chart ── */
+        .org-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 8px;
+        }
+
+        .org-diagram {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+        }
+
+        /* Core Ops Hub circle */
+        .hub-circle {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: #d8f0d8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .hub-label {
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: underline;
+            color: var(--zinc-dark);
+            white-space: nowrap;
+        }
+
+        .hub-center {
+            text-align: center;
+        }
+
+        .hub-center .person-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .hub-center .person-role {
+            font-size: 12px;
+            color: #555;
+            text-decoration: underline;
+        }
+
+        .hub-person {
+            position: absolute;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .hub-person .avatar {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: #c8e8c8;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            margin-bottom: 4px;
+            overflow: hidden;
+        }
+
+        .hub-person .p-role {
+            font-size: 11px;
+            color: #444;
+            font-weight: 600;
+            text-decoration: underline;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .hub-person .p-name {
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Spoke circles */
+        .spoke-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin-left: -20px;
+        }
+
+        .spoke-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: #d8f0d8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+        }
+
+        .spoke-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: underline;
+            color: #e63e8a;
+            white-space: nowrap;
+        }
+
+        .spoke-person { text-align: center; }
+
+        .spoke-person .p-role {
+            font-size: 11px;
+            font-weight: 600;
+            color: #444;
+            text-decoration: underline;
+            line-height: 1.3;
+        }
+
+        .spoke-person .p-name {
+            font-size: 12px;
+            color: #333;
+            margin-top: 2px;
+        }
+
+        /* New role badge */
+        .new-role-wrap {
+            margin-left: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .new-role-arrow {
+            font-size: 20px;
+            color: #aaa;
+            line-height: 1;
+        }
+
+        .new-role-card {
+            background: #fff;
+            border: 2.5px solid var(--zinc-teal);
+            border-radius: 12px;
+            padding: 14px 18px;
+            text-align: center;
+            min-width: 170px;
+            box-shadow: 0 4px 16px rgba(0,255,206,0.15);
+        }
+
+        .new-role-badge {
+            display: inline-block;
+            background: var(--zinc-teal);
+            color: #000;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+
+        .new-role-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--zinc-dark);
+            line-height: 1.3;
+        }
+
+        .new-role-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Structure blocks for how it works details */
+        .structure-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .struct-block {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .struct-block .s-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--zinc-teal);
+            margin-bottom: 8px;
+        }
+
+        .struct-block .s-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--zinc-dark);
+            line-height: 1.3;
+        }
+
+        .struct-block .s-note {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        /* ── Close ── */
+        .close-question {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--zinc-dark);
+            line-height: 1.45;
+            margin-bottom: 36px;
+            max-width: 700px;
+        }
+        .close-question span { color: var(--zinc-teal); }
+
+        .close-checks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .close-check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            color: var(--zinc-gray);
+        }
+
+        .check-dot {
+            width: 7px; height: 7px;
+            background: var(--zinc-teal);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── Nav ── */
+        .nav-dots {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 9px;
+        }
+
+        .nav-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: background 0.25s;
+        }
+
+        .nav-dot.active { background: var(--zinc-teal); }
+    </style>
+</head>
+<body>
+<div class="presentation">
+
+    <!-- ── SLIDE 1: Cover ── -->
+    <div class="slide dark active">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg1" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg1)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="cover-inner">
+            <div class="cover-tag">Internal Alignment · May 2026</div>
+            <h1>Operations Analyst<br><span>Customer Operations</span></h1>
+            <p class="cover-sub" style="color:#777;">A new role to own, maintain, and improve<br>the Customer & AM operational layer</p>
+            <p class="cover-audience" style="margin-top:44px; font-size:13px; color:#555;">
+                For <span style="color:#888; font-weight:600;">Rak Ledgister · Tom Jewell · Anish Patel</span>
+            </p>
+        </div>
+
+        <div class="slide-number">1 / 6</div>
+    </div>
+
+    <!-- ── SLIDE 2: The Problem ── -->
+    <div class="slide">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg2" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg2)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="section-label">The problem</div>
+        <h2>Things get <span>built</span> — but not <span>maintained</span></h2>
+
+        <div class="content-area">
+            <div class="problem-stack">
+                <div class="problem-item">
+                    <div class="prob-icon">🚚</div>
+                    <div class="prob-text">
+                        <strong>Projects get delivered and handed over.</strong> Once something is built, it lands with the team — but no one in ops owns it after that point.
+                    </div>
+                </div>
+                <div class="problem-item">
+                    <div class="prob-icon">📉</div>
+                    <div class="prob-text">
+                        <strong>Things drift over time.</strong> Systems go stale, processes break quietly, and small issues compound without a clear owner to catch them.
+                    </div>
+                </div>
+                <div class="problem-item">
+                    <div class="prob-icon">🔄</div>
+                    <div class="prob-text">
+                        <strong>Daily ops has no permanent home.</strong> The recurring operational work the Customer and AM team depends on has no dedicated, consistent owner.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-number">2 / 6</div>
+    </div>
+
+    <!-- ── SLIDE 3: The Solution ── -->
+    <div class="slide">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg3" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg3)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="section-label">The solution</div>
+        <h2>A dedicated analyst who <span>owns the layer</span></h2>
+
+        <div class="content-area">
+            <p class="solution-statement">
+                This role closes the gap. An <span>operationally-minded analyst</span> whose entire focus is keeping the Customer and AM operational layer running — not building new things, but making sure everything live <span>keeps working</span>.
+            </p>
+
+            <div class="solution-points">
+                <div class="solution-point">
+                    <div class="dot"></div>
+                    Permanent ownership of what already exists — no more handover with no home
+                </div>
+                <div class="solution-point">
+                    <div class="dot"></div>
+                    Someone who wakes up every day thinking about the Customer & AM ops layer
+                </div>
+                <div class="solution-point">
+                    <div class="dot"></div>
+                    Continuity, not project work — sustaining, iterating, and catching drift before it compounds
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-number">3 / 6</div>
+    </div>
+
+    <!-- ── SLIDE 4: What They Own ── -->
+    <div class="slide">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg4" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg4)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="section-label">What they own</div>
+        <h2>Live systems. Daily ops. <span>Everything running</span>.</h2>
+
+        <div class="content-area">
+            <div class="owns-grid">
+                <div class="owns-card">
+                    <div class="owns-card-header">
+                        <div class="owns-icon">⚙️</div>
+                        <h4>Live Systems Maintenance</h4>
+                    </div>
+                    <ul>
+                        <li>Maintaining tools, automations, and workflows already in production</li>
+                        <li>Monitoring for breakage, drift, and degradation</li>
+                        <li>Keeping data flows accurate and up to date</li>
+                    </ul>
+                </div>
+                <div class="owns-card">
+                    <div class="owns-card-header">
+                        <div class="owns-icon">📋</div>
+                        <h4>Daily Operational Processes</h4>
+                    </div>
+                    <ul>
+                        <li>Running the recurring ops that the Customer & AM team depends on</li>
+                        <li>Process consistency and quality across the cycle</li>
+                        <li>First line of triage for ops issues</li>
+                    </ul>
+                </div>
+                <div class="owns-card">
+                    <div class="owns-card-header">
+                        <div class="owns-icon">📈</div>
+                        <h4>Improvements & Iteration</h4>
+                    </div>
+                    <ul>
+                        <li>Incremental improvements to what already exists</li>
+                        <li>Spotting inefficiencies and fixing them with team input</li>
+                        <li>Continuation of prior work — no starting from scratch</li>
+                    </ul>
+                </div>
+                <div class="owns-card">
+                    <div class="owns-card-header">
+                        <div class="owns-icon">📚</div>
+                        <h4>Documentation & Continuity</h4>
+                    </div>
+                    <ul>
+                        <li>Keeping process documentation current and accurate</li>
+                        <li>Ensuring institutional knowledge doesn't walk out the door</li>
+                        <li>Supporting onboarding into the Customer & AM ops layer</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="not-box">
+                <span style="font-size:16px; flex-shrink:0;">🚫</span>
+                <p><strong>Not net-new builds.</strong> This role is sustaining and iterating, not scoping new projects. New builds stay with Core Ops. This person owns what's live.</p>
+            </div>
+        </div>
+
+        <div class="slide-number">4 / 6</div>
+    </div>
+
+    <!-- ── SLIDE 5: How it works ── -->
+    <div class="slide">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg5" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg5)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="section-label">How it works</div>
+        <h2>Where this role <span>sits</span></h2>
+
+        <div class="content-area">
+            <!-- Structure blocks row -->
+            <div class="structure-row">
+                <div class="struct-block">
+                    <div class="s-label">Sits within</div>
+                    <div class="s-value">Core Ops</div>
+                    <div class="s-note">Part of the wider Core Ops team structure, under the Customer Spoke</div>
+                </div>
+                <div class="struct-block">
+                    <div class="s-label">Reports to</div>
+                    <div class="s-value">Core Ops Leadership</div>
+                    <div class="s-note">Not into a senior analyst — direct line to Core Ops management</div>
+                </div>
+                <div class="struct-block">
+                    <div class="s-label">Serves</div>
+                    <div class="s-value">Customer & AM Team only</div>
+                    <div class="s-note">One stakeholder. Their entire working day is in service of this function.</div>
+                </div>
+            </div>
+
+            <!-- Simplified org diagram -->
+            <div style="display:flex; align-items:flex-start; gap:40px; margin-top:22px; padding:22px 28px; background:#fff; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+
+                <!-- Core Ops Hub -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:6px; min-width:130px;">
+                    <div style="width:100px; height:100px; border-radius:50%; background:#c8e8c8; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                        <div style="position:absolute; top:-18px; font-size:10px; font-weight:700; text-decoration:underline; color:#333; white-space:nowrap;">Core Ops Hub</div>
+                        <div style="font-size:11px; font-weight:700; color:#333; text-align:center; line-height:1.3;">Ops Manager<br>Lex</div>
+                    </div>
+                </div>
+
+                <div style="color:#ccc; font-size:22px; margin-top:38px;">→</div>
+
+                <!-- Customer Spoke -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                    <div style="font-size:10px; font-weight:700; text-decoration:underline; color:#e63e8a; white-space:nowrap;">Customer Spoke</div>
+                    <div style="width:88px; height:88px; border-radius:50%; background:#c8e8c8; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="font-size:10px; font-weight:600; color:#444; text-decoration:underline; text-align:center; line-height:1.3;">Customer Ops<br>Analyst</div>
+                        <div style="font-size:11px; color:#333; margin-top:2px;">Zhen</div>
+                    </div>
+                </div>
+
+                <div style="color:#ccc; font-size:22px; margin-top:44px;">↓</div>
+
+                <!-- New role -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:0; margin-top:8px;">
+                    <div style="font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#00FFCE; background:#000; padding:3px 9px; border-radius:4px; margin-bottom:8px;">New hire</div>
+                    <div style="border: 2.5px solid #00FFCE; border-radius:12px; padding:14px 18px; background:#fff; text-align:center; min-width:160px; box-shadow:0 4px 16px rgba(0,255,206,0.12);">
+                        <div style="font-size:13px; font-weight:700; color:#000; line-height:1.4;">Operations Analyst<br>Customer Operations</div>
+                        <div style="font-size:12px; color:#999; margin-top:5px;">£37k+ · Junior level</div>
+                    </div>
+                </div>
+
+                <!-- Right side: what they serve -->
+                <div style="margin-left:auto; display:flex; flex-direction:column; justify-content:center; gap:8px;">
+                    <div style="font-size:11px; font-weight:700; text-decoration:underline; color:#e63e8a; margin-bottom:4px;">Serves</div>
+                    <div style="font-size:14px; font-weight:600; color:#333;">Customer Team</div>
+                    <div style="font-size:14px; font-weight:600; color:#333;">AM Team</div>
+                    <div style="font-size:12px; color:#aaa; margin-top:4px; max-width:120px; line-height:1.4;">One stakeholder group. All day, every day.</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide-number">5 / 6</div>
+    </div>
+
+    <!-- ── SLIDE 6: Close ── -->
+    <div class="slide">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 975 330" width="110" height="37">
+                <defs><linearGradient id="zg6" x1="2448.23" y1="-1225.9" x2="2688.74" y2="-1225.9" gradientTransform="translate(-1061.69 -2405.72) rotate(90)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00ffce"/><stop offset="1" stop-color="#0ee6bd"/></linearGradient></defs>
+                <rect width="975" height="330" rx="39.97" ry="39.97" fill="#000"/>
+                <path fill="#fff" d="M867.21,177.56h51.57c-8.24-28.23-39.82-45.02-85.02-45.02-23.25,0-44.66,4.96-60.3,13.95-18.2,10.47-27.82,26.14-27.82,45.29s8.7,34.38,25.87,44.54c15.29,9.05,36.81,13.83,62.25,13.83,57.75,0,77.55-24,84.31-39.77h-52.1c-7,8.13-18.27,12.25-33.52,12.25-22.81,0-36.97-11.82-36.97-30.85,0-9.9,3.97-18.15,11.49-23.86,6.67-5.07,15.87-7.86,25.92-7.86,16.51,0,30.11,6.98,34.32,17.49Z"/>
+                <polygon fill="#fff" points="318.42 201.75 318.42 245.79 490.72 245.79 490.72 214.33 373.26 214.33 490.72 127.16 490.72 83.12 321.45 83.12 320.65 114.58 435.52 114.58 318.42 201.75"/>
+                <path fill="#fff" d="M656.02,159.63c19.32,0,30.85,11.04,30.85,29.54v56.62h48.53l.43-61.88c.1-13.86-4.17-25.24-12.69-33.83-10.38-10.46-26.92-16.22-46.56-16.22-24.81,0-45,8.76-56.85,24.66l-1.96,2.63-5.83-23.79h-40.54v108.44h48.52v-50.5c0-22,13.83-35.66,36.1-35.66Z"/>
+                <rect fill="#fff" x="506.15" y="137.36" width="48.95" height="108.44"/>
+                <path fill="url(#zg6)" d="M269.42,217.91V107.63c0-3.57-1.9-6.87-4.99-8.65l-95.21-55.12c-3.1-1.79-6.92-1.79-10.02,0L63.98,98.97c-3.09,1.79-4.99,5.09-4.99,8.65v110.28c0,3.57,1.9,6.87,4.99,8.65l95.21,55.12c3.1,1.79,6.92,1.79,10.02,0l95.21-55.12c3.09-1.79,4.99-5.09,4.99-8.65Z"/>
+                <polygon points="148.75 91.91 107 116.24 107 133.18 140.53 113.61 140.7 113.78 114.89 161.12 114.89 179.04 172.1 145.83 172.26 146 127.38 209.78 127.38 230 245.75 161.29 227.83 150.93 161.41 189.89 161.25 189.73 203.33 127.42 188.21 118.54 136.59 148.63 136.42 148.46 163.39 100.46 148.75 91.91"/>
+            </svg>
+        </div>
+
+        <div class="section-label">Alignment check</div>
+
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+            <p class="close-question">
+                This is what we're building.<br>
+                <span>Does this match what you need?</span>
+            </p>
+
+            <div class="close-checks">
+                <div class="close-check">
+                    <div class="check-dot"></div>
+                    A dedicated analyst whose job is to own what's live — not build new things
+                </div>
+                <div class="close-check">
+                    <div class="check-dot"></div>
+                    Sits in Core Ops, beneath the Customer Spoke (under Zhen), serves the Customer & AM team only
+                </div>
+                <div class="close-check">
+                    <div class="check-dot"></div>
+                    Junior level (1–2 yrs), operationally minded, £37k+
+                </div>
+                <div class="close-check">
+                    <div class="check-dot"></div>
+                    Reports into Core Ops leadership — not into a senior analyst
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-number">6 / 6</div>
+    </div>
+
+    <!-- Navigation dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" data-slide="0"></div>
+        <div class="nav-dot" data-slide="1"></div>
+        <div class="nav-dot" data-slide="2"></div>
+        <div class="nav-dot" data-slide="3"></div>
+        <div class="nav-dot" data-slide="4"></div>
+        <div class="nav-dot" data-slide="5"></div>
+    </div>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.nav-dot');
+    let current = 0;
+
+    function showSlide(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') showSlide(current + 1);
+        if (e.key === 'ArrowLeft') showSlide(current - 1);
+    });
+
+    dots.forEach(dot => dot.addEventListener('click', () => showSlide(+dot.dataset.slide)));
+</script>
+</body>
+</html>
